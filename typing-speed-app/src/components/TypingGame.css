@@ -1,0 +1,101 @@
+/* src/components/TypingGame.css */
+.typing-game {
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient background */
+    color: #fff;
+  }
+  
+  .typing-game h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .typing-game p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    justify-items: center; /* Center items horizontally */
+  }
+  
+  .grid-item {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .grid-item:hover {
+    transform: translateY(-10px); /* Lift effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .level-content {
+    text-align: center;
+  }
+  
+  .grid-item h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .grid-item p {
+    margin: 5px 0 0;
+    font-size: 1rem;
+    color: #666;
+    font-family: 'Arial', sans-serif;
+  }
+  .calendar {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fc-daygrid-day {
+    cursor: pointer;
+  }
+  
+  .fc-daygrid-day-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .fc-daygrid-day-content {
+    font-size: 0.9em;
+  }
+  
+  .fc-daygrid-day:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .fc-daygrid-day-number {
+    font-weight: bold;
+  }
+  
+  .fc-daygrid-day-top .fc-daygrid-day-number {
+    color: #007bff;
+  }
+  
+  .fc-daygrid-day-top .fc-daygrid-day-number {
+    border-radius: 50%;
+    padding: 2px 6px;
+  }
+  

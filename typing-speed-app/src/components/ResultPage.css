@@ -1,0 +1,105 @@
+.result-page {
+  display: flex;
+  height: 100vh;
+  background-image: url('https://img.freepik.com/free-photo/young-man-working-modern-laptop-blurred-photo_185193-110574.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1697846400&semt=ais');
+  background-size: cover;
+  background-position: center;
+  color: white; /* Default text color */
+}
+
+.text-input-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.text-section, .input-section {
+  flex: 1;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.text-section {
+  display: flex;
+  align-items: center; /* Center text vertically */
+  justify-content: center; /* Center text horizontally */
+  position: relative;
+}
+
+.text-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center text vertically within the container */
+  white-space: pre-wrap; /* Preserve spaces and handle new lines */
+  overflow-y: auto; /* Enable vertical scrolling */
+  font-family: 'Courier New', monospace; /* Consistent font */
+  color: white; /* Ensure text is white */
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-clock {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 1rem;
+}
+
+.countdown-clock svg {
+  transform: rotate(-90deg);
+}
+
+.countdown-clock .time-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.user-input {
+  width: 100%;
+  height: 150px;
+  margin-top: 1rem;
+  padding: 10px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Include padding in width/height calculations */
+}
+
+.view-result-button {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #28a745; /* Green background */
+  color: white; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.view-result-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Highlight correct and incorrect words */
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}

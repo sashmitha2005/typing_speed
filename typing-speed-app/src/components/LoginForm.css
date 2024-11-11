@@ -1,0 +1,66 @@
+
+.login-modal .modal-content {
+    background-color: #e0f7fa; 
+    border-radius: 8px;
+  }
+  
+  
+  .login-modal .modal-header {
+    border-bottom: none;
+    display: flex;
+    justify-content: center;
+  }
+  
+ 
+  .login-modal .modal-body {
+    padding: 20px;
+    text-align: center;
+  }
+ 
+  .login-modal .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .login-modal .form-control {
+    border-radius: 5px;
+    box-shadow: none; 
+    border: 1px solid #ced4da;
+  }
+  
+ 
+  .login-modal .form-control.is-invalid {
+    border-color: #dc3545; 
+  }
+  
+  .login-modal .invalid-feedback {
+    display: block; 
+    color: #dc3545; 
+    font-size: 0.875em; 
+  }
+  
+  
+  .forgot-password-btn {
+    display: block;
+    margin-top: 10px;
+    color: #007bff;
+    font-size: 0.875em;
+  }
+  
+  .forgot-password-btn:hover {
+    color: #0056b3; 
+    text-decoration: underline;
+  }
+  
+ 
+  .submit-btn {
+    margin-top: 20px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0056b3; 
+    border-color: #0056b3;
+  }
+  

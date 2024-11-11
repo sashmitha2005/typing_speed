@@ -1,0 +1,74 @@
+/* Ensure the html and body elements cover the full viewport height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Apply background styling to the entire page */
+.admin-page {
+    background: url('https://wallpapercave.com/wp/wp2508260.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh; /* Full viewport height */
+    color: white;
+    padding: 20px;
+}
+
+/* Container styling */
+.container {
+    background: rgba(0, 0, 0, 0.7); /* Darker background for better readability */
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 800px; /* Limit the container's width */
+    margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Heading styling */
+h2, h3 {
+    color: #f8f9fa;
+    margin-bottom: 20px;
+    text-align: center; /* Center align the headings */
+}
+
+/* Button styling */
+.btn-primary {
+    background: linear-gradient(45deg, #003366, #002a4d) !important; /* Dark blue gradient */
+    border-color: #003366 !important;
+    color: #fff !important; /* White text */
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #002a4d, #001f3f) !important; /* Slightly darker blue gradient */
+    border-color: #002a4d !important;
+}
+
+/* Edit and Delete button styling */
+.btn-edit, .btn-delete {
+    background-color: #003366 !important; /* Dark blue color */
+    border-color: #003366 !important;
+    color: #fff !important; /* White text */
+    padding: 8px 12px !important; /* Adjust padding for better appearance */
+    margin: 5px !important; /* Margin for spacing between buttons */
+    border-radius: 4px !important; /* Rounded corners */
+    display: inline-block !important; /* Ensure proper spacing and alignment */
+    font-size: 14px !important; /* Adjust font size for readability */
+    text-align: center !important;
+    line-height: 1.5 !important; /* Adjust line height for better vertical alignment */
+}
+
+.btn-edit:hover, .btn-delete:hover {
+    background-color: #002a4d !important; /* Slightly darker blue color */
+    border-color: #002a4d !important;
+}
+
+/* List item styling */
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* Margin for spacing between list items */
+    border: 1px solid #003366; /* Dark border for separation */
+    border-radius: 8px;
+    padding: 10px;
+}
