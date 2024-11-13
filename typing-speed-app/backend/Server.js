@@ -1,88 +1,129 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const User = require('./models/User'); 
-
-dotenv.config(); 
 
 const app = express();
 const port = 5000;
 
 app.use(cors());
-app.use(express.json());
-
+app.use(express.json()); 
 
 mongoose.connect('mongodb://localhost:27017/typingApp', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
+  .then(async () => {
     console.log('MongoDB connected');
+    await initializeCounters();
   })
   .catch(err => console.log('Error connecting to MongoDB:', err));
 
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
-
-
-app.post('/api/auth/register', async (req, res) => {
-  const { username, email, password } = req.body;
-
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+const paragraphSchema = new mongoose.Schema({
+  text: String,
+  difficulty: String
 });
 
+const Paragraph = mongoose.model('Paragraph', paragraphSchema);
 
-app.post('/api/auth/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+const counterSchema = new mongoose.Schema({
+  difficulty: { type: String, unique: true },
+  currentIndex: { type: Number, default: 0 }
 });
 
-// Middleware to authenticate JWT
-const authenticateJWT = (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Bearer token
+const Counter = mongoose.model('Counter', counterSchema);
 
-  if (!token) return res.status(403).json({ message: 'Access denied' });
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
-    req.user = user;
-    next();
-  });
+const initializeCounters = async () => {
+  const difficulties = ['easy', 'medium', 'hard'];
+  for (const difficulty of difficulties) {
+    const existingCounter = await Counter.findOne({ difficulty });
+    if (!existingCounter) {
+      await Counter.create({ difficulty });
+    }
+  }
 };
 
-// Protected route (for testing)
-app.get('/api/protected', authenticateJWT, (req, res) => {
-  res.json({ message: 'This is a protected route', user: req.user });
+app.get('/paragraphs/all', async (req, res) => {
+  try {
+    const paragraphs = await Paragraph.find({});
+    res.json(paragraphs);
+  } catch (error) {
+    console.error('Error fetching all paragraphs:', error);
+    res.status(500).json({ message: 'Failed to fetch paragraphs' });
+  }
 });
 
-// Start the server
+app.get('/paragraphs', async (req, res) => {
+  const { difficulty } = req.query;
+  try {
+    if (!difficulty) {
+      return res.status(400).json({ message: 'Difficulty level is required' });
+    }
+
+    const counter = await Counter.findOne({ difficulty });
+    if (!counter) {
+      return res.status(404).json({ message: 'Counter not found for this difficulty level' });
+    }
+
+    const paragraphs = await Paragraph.find({ difficulty });
+    if (paragraphs.length === 0) {
+      return res.status(404).json({ message: 'No paragraphs found for this difficulty level' });
+    }
+
+    const paragraph = paragraphs[counter.currentIndex];
+    console.log(`Fetching paragraph for difficulty: ${difficulty}`);
+    console.log(`Current Index: ${counter.currentIndex}`);
+    console.log(`Fetched Paragraph: ${paragraph.text}`);
+
+    res.json([paragraph]); 
+
+    counter.currentIndex = (counter.currentIndex + 1) % paragraphs.length;
+    await counter.save();
+
+    console.log(`Updated Index for difficulty ${difficulty}: ${counter.currentIndex}`);
+  } catch (error) {
+    console.error('Error fetching paragraphs:', error);
+    res.status(500).json({ message: error.message }); 
+  }
+});
+
+app.post('/paragraphs', async (req, res) => {
+  const { text, difficulty } = req.body;
+  try {
+    const newParagraph = new Paragraph({ text, difficulty });
+    await newParagraph.save();
+    res.status(201).json(newParagraph); 
+  } catch (error) {
+    console.error('Error adding paragraph:', error);
+    res.status(500).json({ message: error.message }); 
+  }
+});
+
+app.put('/paragraphs/:id', async (req, res) => {
+  const { id } = req.params;
+  const { text, difficulty } = req.body;
+  try {
+    const updatedParagraph = await Paragraph.findByIdAndUpdate(id, { text, difficulty }, { new: true });
+    if (!updatedParagraph) {
+      return res.status(404).json({ message: 'Paragraph not found' });
+    }
+    res.json(updatedParagraph);
+  } catch (error) {
+    console.error('Error updating paragraph:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.delete('/paragraphs/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedParagraph = await Paragraph.findByIdAndDelete(id);
+    if (!deletedParagraph) {
+      return res.status(404).json({ message: 'Paragraph not found' });
+    }
+    res.json({ message: 'Paragraph deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting paragraph:', error);
+    res.status(500).json({ message: error.message }); 
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
