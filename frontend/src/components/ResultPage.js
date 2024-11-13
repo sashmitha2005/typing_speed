@@ -14,7 +14,7 @@ const ResultPage = () => {
   const [isTypingDisabled, setIsTypingDisabled] = useState(false);
   const [paragraph, setParagraph] = useState(null);
   const [correctWordsOverTime, setCorrectWordsOverTime] = useState([]);
-  const [typedWordsCount, setTypedWordsCount] = useState(0); // Track typed words count
+  const [typedWordsCount, setTypedWordsCount] = useState(0); 
   const inputRef = useRef(null);
   const textContainerRef = useRef(null);
 
@@ -22,18 +22,16 @@ const ResultPage = () => {
     const fetchParagraph = async () => {
       try {
         const response = await axios.get('/paragraphs', {
-          params: { "difficulty":difficulty }
+          params: { difficulty },
         });
-        if(response.status==200)
-        {
-        setParagraph(response.data[0]);
-        }
-        else{
-          setParagraph("error")
+        if (response.status === 200 && response.data.length > 0) {
+          setParagraph(response.data[0]);
+        } else {
+          setParagraph({ text: 'Error loading paragraph' });
         }
       } catch (error) {
         console.error('Error fetching paragraphs:', error);
-        setParagraph("error")
+        setParagraph({ text: 'Network error. Please try again later.' });
       }
     };
 
@@ -44,7 +42,6 @@ const ResultPage = () => {
     if (timeLeft > 0) {
       const timerId = setInterval(() => {
         setTimeLeft(prevTime => prevTime - 1);
-        // Track correct words over time
         if (inputRef.current) {
           const correctWords = calculateResults().correctWords;
           setCorrectWordsOverTime(prev => [...prev, correctWords]);
@@ -91,7 +88,7 @@ const ResultPage = () => {
   };
 
   const calculateResults = () => {
-    if (!paragraph) return { typingSpeed: 0, accuracy: 0, totalWords: 0, correctWords: 0, incorrectWords: 0, wpm: 0, mistakes: 0 };
+    if (!paragraph?.text) return { typingSpeed: 0, accuracy: 0, totalWords: 0, correctWords: 0, incorrectWords: 0, wpm: 0, mistakes: 0 };
 
     const wordsTyped = userInput.trim().split(' ').length;
     const correctWords = paragraph.text.trim().split(' ').filter((word, index) => {
@@ -100,9 +97,9 @@ const ResultPage = () => {
     const totalWords = paragraph.text.trim().split(' ').length;
     const incorrectWords = wordsTyped - correctWords;
     const accuracy = (correctWords / totalWords) * 100;
-    const typingSpeed = wordsTyped / convertTimeToSeconds(selectedTime); // Words per second
-    const wpm = (wordsTyped / convertTimeToSeconds(selectedTime)) * 60; // Words per minute
-    const mistakes = incorrectWords; // Total mistakes
+    const typingSpeed = wordsTyped / convertTimeToSeconds(selectedTime); 
+    const wpm = (wordsTyped / convertTimeToSeconds(selectedTime)) * 60; 
+    const mistakes = incorrectWords; 
 
     return { typingSpeed, accuracy, totalWords, correctWords, incorrectWords, wpm, mistakes };
   };
@@ -113,7 +110,7 @@ const ResultPage = () => {
   };
 
   const getHighlightedText = () => {
-    if (!paragraph) return null;
+    if (!paragraph?.text) return <p>Error loading paragraph.</p>;
 
     const words = paragraph.text.split(' ');
     const inputWords = userInput.trim().split(' ');
